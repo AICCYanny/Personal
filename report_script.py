@@ -54,7 +54,7 @@ def parse_prem(s):
         b = float(parts[1])
         unit_c = parts[2].upper()
         unit_p = parts[3].upper()
-        if unit_c or unit_p not in ("M", "K", "B"):
+        if unit_c not in ("M","K","B") or unit_p not in ("M","K","B"):
             return None
         return a, b, unit_c, unit_p
     except Exception:
