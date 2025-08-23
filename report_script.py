@@ -9,7 +9,7 @@ yesterday_str = st.text_input("Yesterday（同上）")
 lastweek_str = st.text_input("Last week（同上）")
 gamma_str = st.text_input("Gamma（三项：今天 昨天 单位；示例：-1.79  -1.39  M）")
 other = st.text_input("Ticker, Vol/30D, OI（示例：SPY, 1.26, 0.37）")
-pc_prem_str = st.text("Call Prem, Put Prem")
+pc_prem_str = st.text_input("Call Prem, Put Prem")
 
 # ------------------ Helpers ------------------
 def parse_numbers_ints(s):
