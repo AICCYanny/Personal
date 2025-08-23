@@ -9,6 +9,7 @@ yesterday_str = st.text_input("Yesterday（同上）")
 lastweek_str = st.text_input("Last week（同上）")
 gamma_str = st.text_input("Gamma（三项：今天 昨天 单位；示例：-1.79  -1.39  M）")
 other = st.text_input("Ticker, Vol/30D, OI（示例：SPY, 1.26, 0.37）")
+pc_prem_str = st.text("Call Prem, Put Prem")
 
 # ------------------ Helpers ------------------
 def parse_numbers_ints(s):
@@ -162,6 +163,7 @@ if st.button("Calculate"):
         today = parse_numbers_ints(today_str)
         yesterday = parse_numbers_ints(yesterday_str)
         lastweek = parse_numbers_ints(lastweek_str)
+        pc_prem = parse_numbers_ints(pc_prem_str)
     except Exception:
         st.error("Today/Yesterday/Last week 解析失败：请只输入用空格或逗号分隔的正整数。")
         st.stop()
@@ -186,11 +188,13 @@ if st.button("Calculate"):
     t_total, t_call, t_put, t_amt = today
     y_total, y_call, y_put, y_amt = yesterday
     w_total, w_call, w_put, w_amt = lastweek
+    c_prem, p_prem = pc_prem
 
     # 首行复述（单位换算，两位小数）
     line1 = (
         f"今天{ticker}总成交量{humanize_2dec(t_total)}（call {humanize_2dec(t_call)}，"
-        f"put {humanize_2dec(t_put)}），总成交额{humanize_2dec(t_amt)}。"
+        f"put {humanize_2dec(t_put)}），总成交额{humanize_2dec(t_amt)}，"
+        f"call成交额 {humanize_2dec(c_prem)}，put成交额 {humanize_2dec(p_prem)}。"
     )
 
     # 第二行：均值比原样 + 总量环比/同比
