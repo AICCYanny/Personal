@@ -1,0 +1,25 @@
+//@version=6
+indicator("VIX Term Structure Ratio + SMA v2", overlay=false)
+
+// ===== 输入参数 =====
+shortSym = input.symbol("CBOE:VIX", "短期波动率指数")
+longSym  = input.symbol("CBOE:VIX3M", "长期波动率指数")
+useHTF   = input.bool(true, "统一使用日线数据")  // 建议设为true
+maLength = input.int(30, "SMA长度", minval=1, step=1)
+
+// 使用的分辨率
+tf = useHTF ? "D" : timeframe.period
+
+// ===== 请求数据（正确的时区语法） =====
+shortVol = request.security(shortSym, tf, close, gaps=barmerge.gaps_on, lookahead=barmerge.lookahead_on)
+longVol  = request.security(longSym, tf, close, gaps=barmerge.gaps_on, lookahead=barmerge.lookahead_on)
+
+// 防止除零或空值
+ratio = (na(longVol) or longVol == 0) ? na : shortVol / longVol
+
+// ===== 可调SMA =====
+ratioMA = ta.sma(ratio, maLength)
+
+// ===== 绘图 =====
+plot(ratio, title="VIX Ratio", color=color.rgb(41, 225, 228), linewidth=2)
+plot(ratioMA, title="Ratio SMA", color=color.orange, linewidth=2)
