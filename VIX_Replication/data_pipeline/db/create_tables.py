@@ -2,6 +2,7 @@ from ..models.base import Base
 from .engine import engine
 from ..models.symbols import Symbol
 from ..models.option_quotes import OptionQuote
+from ..models.daily_snapshot import DailySnapshot
 
 def create_all():
     Base.metadata.drop_all(bind=engine)
