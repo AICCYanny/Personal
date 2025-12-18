@@ -33,11 +33,12 @@ def poll_download_info(detail_url, max_tries=10, delay=0.5):
 
     raise RuntimeError("download file not ready")
 
-async def poll_detail_until_ready(detail_url, session, timeout=30, interval=0.4):
+async def poll_detail_until_ready(detail_url, session, timeout=180, interval=0.5, max_interval=5.0):
     """
     Polls the urlForDetails endpoint until 'urlForDownload' becomes available.
     """
     start = asyncio.get_event_loop().time()
+    sleep = interval
 
     while True:
         async with session.get(detail_url) as resp:
@@ -58,7 +59,8 @@ async def poll_detail_until_ready(detail_url, session, timeout=30, interval=0.4)
         if asyncio.get_event_loop().time() - start > timeout:
             raise TimeoutError(f"Polling timed out for detail URL: {detail_url}")
 
-        await asyncio.sleep(interval)
+        await asyncio.sleep(sleep)
+        sleep = min(sleep * 1.3, max_interval)
 
 def download_csv(download_url: str) -> pd.DataFrame:
     resp = requests.get(download_url, timeout=15)
